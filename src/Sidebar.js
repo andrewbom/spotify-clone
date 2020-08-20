@@ -9,8 +9,8 @@ import { useDataLayerValue } from "./DataLayer";
 // import { getTokenFromResponse } from "./spotify";
 
 const Sidebar = () => {
-  const [{ playlists }, dispatch] = useDataLayerValue();
-  console.log(playlists);
+  const [{ playlists }] = useDataLayerValue();
+  // console.log(playlists);
 
   return (
     <div className="sidebar">

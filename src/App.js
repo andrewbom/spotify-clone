@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SpotifyWebApi from "spotify-web-api-js";
 import { useDataLayerValue } from "./DataLayer";
 import Player from "./Player";
@@ -9,7 +9,8 @@ import Login from "./Login";
 const spotify = new SpotifyWebApi();
 
 function App() {
-  const [{ user, token }, dispatch] = useDataLayerValue();
+  const [{ token }, dispatch] = useDataLayerValue();
+  const [playlist_ID, setID] = useState("");
 
   useEffect(() => {
     // Set token
@@ -36,35 +37,32 @@ function App() {
           type: "SET_PLAYLISTS",
           playlists: playlists,
         });
+
+        setID(playlists.items[Math.floor(Math.random() * playlists.items.length)].id);
+      });
+
+      spotify.getMyTopArtists().then((response) =>
+        dispatch({
+          type: "SET_TOP_ARTISTS",
+          top_artists: response,
+        })
+      );
+
+      dispatch({
+        type: "SET_SPOTIFY",
+        spotify: spotify,
       });
     }
 
-    //   s.getPlaylist("37i9dQZEVXcJZyENOWUFo7").then((response) =>
-    //     dispatch({
-    //       type: "SET_DISCOVER_WEEKLY",
-    //       discover_weekly: response,
-    //     })
-    //   );
-
-    //   s.getMyTopArtists().then((response) =>
-    //     dispatch({
-    //       type: "SET_TOP_ARTISTS",
-    //       top_artists: response,
-    //     })
-    //   );
-
-    //   dispatch({
-    //     type: "SET_SPOTIFY",
-    //     spotify: s,
-    //   });
-
-    //   s.getMe().then((user) => {
-    //     dispatch({
-    //       type: "SET_USER",
-    //       user,
-    //     });
-    //   });
-  }, []); //token, dispatch
+    if (playlist_ID) {
+      spotify.getPlaylist(playlist_ID).then((response) =>
+        dispatch({
+          type: "SET_DISCOVER_WEEKLY",
+          discover_weekly: response,
+        })
+      );
+    }
+  }, [token, playlist_ID, dispatch]);
 
   return <div className="app">{token ? <Player spotify={spotify} /> : <Login />}</div>;
 }
