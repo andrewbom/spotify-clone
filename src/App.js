@@ -17,6 +17,7 @@ function App() {
     const hash = getTokenFromResponse();
     window.location.hash = "";
     let _token = hash.access_token;
+    // console.log(token);
 
     if (_token) {
       dispatch({
@@ -61,6 +62,11 @@ function App() {
           discover_weekly: response,
         })
       );
+
+      dispatch({
+        type: "SET_PLAYLIST_ID",
+        playlist_ID,
+      });
     }
   }, [token, playlist_ID, dispatch]);
 

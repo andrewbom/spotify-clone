@@ -1,16 +1,12 @@
-// import { findAllByDisplayValue } from "@testing-library/react";
-
 export const initialState = {
   user: null,
   playlists: [],
+  playlist_ID: null,
   spotify: null,
   discover_weekly: null,
   top_artists: null,
   playing: false,
   item: null,
-  // remove after finished developing
-  // token:
-  //   "BQBCKp6UmmqRnIWvWLlKrRqwr-RaHcGR0OWLGP5Rd05n0Lzux-ZFfPiXffIGZ4hYthU12CwynnBY65x7YiCOmUHcHtfCNElwIcHCeeDIDg3bo4E0uCH7-NvE2fohGgKN9zfm_cQ-E2GGYe2jbhhtSBqxzF9MVbgQsA",
 };
 
 const reducer = (state, action) => {
@@ -62,6 +58,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         spotify: action.spotify,
+      };
+
+    case "SET_PLAYLIST_ID":
+      return {
+        ...state,
+        playlist_ID: action.playlist_ID,
       };
 
     default:

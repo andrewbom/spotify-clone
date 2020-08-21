@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDataLayerValue } from "./DataLayer";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
@@ -12,12 +12,9 @@ import "./Footer.css";
 import { Grid, Slider } from "@material-ui/core";
 
 function Footer({ spotify }) {
-  const [{ token, item, playing }, dispatch] = useDataLayerValue();
-
+  const [{ item, playing }, dispatch] = useDataLayerValue();
   useEffect(() => {
     spotify.getMyCurrentPlaybackState().then((r) => {
-      console.log("💪", r);
-
       dispatch({
         type: "SET_PLAYING",
         playing: r.is_playing,
@@ -28,7 +25,7 @@ function Footer({ spotify }) {
         item: r.item,
       });
     });
-  }, [spotify]);
+  }, [spotify, dispatch]);
 
   const handlePlayPause = () => {
     if (playing) {
@@ -77,7 +74,7 @@ function Footer({ spotify }) {
   return (
     <div className="footer">
       <div className="footer__left">
-        <img className="footer__albumLogo" src={item?.album.images[0].url} alt={item?.name} />
+        <img className="footer__albumLogo" src={item?.album.images[0]?.url} alt="" />
         {item ? (
           <div className="footer__songInfo">
             <h4>{item.name}</h4>
@@ -93,7 +90,7 @@ function Footer({ spotify }) {
 
       <div className="footer__center">
         <ShuffleIcon className="footer__green" />
-        <SkipPreviousIcon onClick={skipNext} className="footer__icon" />
+        <SkipPreviousIcon onClick={skipPrevious} className="footer__icon" />
         {playing ? (
           <PauseCircleOutlineIcon
             onClick={handlePlayPause}
@@ -107,7 +104,7 @@ function Footer({ spotify }) {
             className="footer__icon"
           />
         )}
-        <SkipNextIcon onClick={skipPrevious} className="footer__icon" />
+        <SkipNextIcon onClick={skipNext} className="footer__icon" />
         <RepeatIcon className="footer__green" />
       </div>
 

@@ -8,26 +8,24 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 function Body({ spotify }) {
-  const [{ discover_weekly }, dispatch] = useDataLayerValue();
-  console.log("💖", discover_weekly);
+  const [{ discover_weekly, playlist_ID }, dispatch] = useDataLayerValue();
   const playPlaylist = (id) => {
-    // spotify
-    //   .play({
-    //     context_uri: `spotify:track:6WttjgrcxCq1CZnydPVVvt`,
-    //   })
-    //   .then((res) => {
-    //     console.log("Here!!!!!!!!! 👉🏻", res);
-    //     spotify.getMyCurrentPlayingTrack().then((r) => {
-    //       dispatch({
-    //         type: "SET_ITEM",
-    //         item: r.item,
-    //       });
-    //       dispatch({
-    //         type: "SET_PLAYING",
-    //         playing: true,
-    //       });
-    //     });
-    //   });
+    spotify
+      .play({
+        context_uri: `spotify:playlist:${playlist_ID}`,
+      })
+      .then((res) => {
+        spotify.getMyCurrentPlayingTrack().then((r) => {
+          dispatch({
+            type: "SET_ITEM",
+            item: r.item,
+          });
+          dispatch({
+            type: "SET_PLAYING",
+            playing: true,
+          });
+        });
+      });
   };
 
   const playSong = (id) => {
@@ -36,7 +34,6 @@ function Body({ spotify }) {
         uris: [`spotify:track:${id}`],
       })
       .then((res) => {
-        console.log(res);
         spotify.getMyCurrentPlayingTrack().then((r) => {
           dispatch({
             type: "SET_ITEM",
